@@ -1,7 +1,6 @@
 
 import MySQLdb
 import pandas as pd
-import openpyxl
 import random
 import string
 

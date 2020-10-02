@@ -12,11 +12,12 @@ def spotify_client():
 # search songs in youtube and get the spotify link
 def find_songs(songs_list):
     songs_format = list(filter(None,list(map(checkline,songs_list))))   # remove index, labels and useless information
-    songs_found = list(map(getSpotifyName,songs_format))    # songs found in spotify
+    songs_found = list(map(getSpotifySong,songs_format))                # songs found in spotify
     bool_list = list(map(lambda x,y:checkSong(x,y), songs_format, songs_found)) # check that song found is the same as the youtube
     songs_checked = list(compress(songs_found, bool_list)) # list of songs
+    song_metadata = addData(songs_checked)
 
-    return songs_checked
+    return song_metadata
 
 def textarea2list(video):
     # clean songs input
@@ -34,9 +35,14 @@ def checkline(x):
             x = x.lower()
 
             # replace characters
-            to_replace = [':','-','&','?','feat','. ','unreleased','original mix','(',')']
+            to_replace = [':','-','&','?','feat','. ','unreleased','original mix','(',') ',')','"']
             for r in to_replace:
                 x = x.replace(r, '')
+
+            # delte
+            to_delete = ['????','tracklist']
+            if any(d in x for d in to_delete):
+                x = ''
 
             # delete collection
             p = x.rfind('[')
@@ -48,42 +54,45 @@ def checkline(x):
             x.pop(0)
 
             # join words into a string
-            song = ' '.join(x)
+            x = ' '.join(x)
 
-            # delte id - id
-            if song == 'id id' or '????' in song:
-                song = ''
+            # nina
+            if x[0:2] == 'id' and x[-2:] == 'id':
+                x = ''
+
+            
         except:
-            song = ''
+            x = ''
 
-        return song
+        return x
 
-def getSpotifyName(x):
+def getSpotifySong(x):
 
     # search song in spotify
     result = sp.search(x,type='track',limit=1)
     if (len(result['tracks']['items']) > 0):
         track = result['tracks']['items'][0]
-        track_id = track['id']
-        name = track['name']
-        artist = getArtistString(track['artists'])
-        album = track['album']['name']
-        albumid = track['album']['id']
-        href = track['external_urls']['spotify']
-        image = track['album']['images'][2]['url']
-        pop = track['popularity']
-        album_result = sp.album(album_id=albumid)
-        label = album_result['label']
-        song = [track_id,name,artist,album,href,image,pop,label]       
+
+        song = {
+            'id':track['id'],
+            'name':track['name'],
+            'artist':getArtistString(track['artists']),
+            'album':track['album']['name'],
+            'album_id':track['album']['id'],
+            'href':track['external_urls']['spotify'],
+            'hmp3':track['preview_url'],
+            'image':track['album']['images'][2]['url'],
+            'pop':track['popularity']}
+
         return song
     else:
         return ''
 
 def checkSong(s1,s2):
     if s1 and s2:
-        track = s2[1].lower()
-        artist = s2[2].lower()
-        album = s2[3].lower()
+        track = s2["name"].lower()
+        artist = s2["artist"].lower()
+        album = s2["album"].lower()
         checker = track + ' ' + artist + ' ' + album
         if all(x in checker for x in s1.split()):
             return True
@@ -91,6 +100,22 @@ def checkSong(s1,s2):
             return False
     else:
         return False
+
+def addData(songs):
+    # track objects
+    if songs != []:
+        t = [x['id'] for x in songs]
+        resT = sp.audio_features(t)
+
+        # album objects
+        a = [x['album_id'] for x in songs]
+        resA = sp.albums(a)
+
+        for i in range(len(songs)):
+            songs[i].update({'bpm':round(resT[i]['tempo'])})
+            songs[i].update({'label':resA['albums'][i]['label']})
+
+    return songs
 
 
 # print functions

@@ -49,7 +49,7 @@ def addVideoComments(vdict):
     return vdict
 
 def cfilter(c,th):
-    if c.count(' - ') > th:
+    if c.count('-') > th:
         return True
     else:
         return False

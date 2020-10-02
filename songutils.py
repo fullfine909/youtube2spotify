@@ -6,9 +6,7 @@ import pickle
 
 # save song in sql
 def saveSongs(x,yt):
-    t = [s[0] for s in x]
-    res = sp.tracks(t)['tracks']
-    saveRes(res,yt)
+    saveRes(x,yt)
     #addSongs(res,yt)
 
 def addSongs(res,yt):
@@ -62,7 +60,6 @@ def openRes():
         [res,yt] = pickle.load(f)
     return [res,yt]
 
-[res,yt] = openRes()
 
 
 

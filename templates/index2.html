@@ -26,13 +26,14 @@
 						<div class="col-lg-4">
 						</div>
 						<div class="col-lg-4">
-							<h1>YOUTUBE 2 SPOTIFY</h1>
+							<h1 id=title>YOUTUBE 2 SPOTIFY</h1>
+							<br><br>
 							<div class="bs-component">
 								<!-- USER INPUT-->
 								<form id="formid" method="post">
 									<fieldset>										
 										<div id="search_form" class="form-group">
-											<h3>Youtube link</h3>
+											<h5>Youtube link</h5>
 											<input type="text" name="link_input" placeholder="Paste it here!" style="color:whitesmoke; background-color:black;border:black;"required></textarea>											
 											<br><br>
 											<input type="button" class="btn btn-primary" value="GO!" onclick="submitAndHide()"></button>
@@ -55,13 +56,13 @@
 						function submitAndHide(){
 							document.getElementById("search_form").style="display:none";
 							document.getElementById("formid").submit();
-
 						}
 
 						function hideSearchform(){
 							if ((arr.length)>0){
 								document.getElementById("search_form").style="display:none";
 								document.getElementById("resetbutton").style="display:inline";
+								document.getElementById("title").innerHTML = yt
 							}
 						}
 
@@ -69,10 +70,22 @@
 								document.getElementById("search_form").style="display:inline";
 								document.getElementById("list-content").innerHTML = "";
 								document.getElementById("resetbutton").style="display:none";
+								document.getElementById("title").innerHTML = "YOUTUBE 2 SPOTIFY"
 								arr = []
 
 						}
-															
+						
+						function playSong(i){
+							a.pause();
+							mp3 = arr[i]["hmp3"]
+							a = new Audio(mp3);
+    						a.play();
+						}
+
+						function pauseSong(){
+							a.pause();
+						}
+
 						function showSongs(){
 							let con = document.getElementById('list-content');   									
 							var list = '<div class="list-group">';
@@ -81,13 +94,15 @@
 							//loop for songs
 							for(let i=0;i<arr.length;i++){
 
-								var title = arr[i][1]
-								var artist = arr[i][2]
-								var album = arr[i][3]
-								var href = arr[i][4]
-								var image = arr[i][5]
-								var pop = arr[i][6]
-								var label = arr[i][7]
+								var name = arr[i]["name"]
+								var artist = arr[i]["artist"]
+								var album = arr[i]["album"]
+								var href = arr[i]["href"]
+								var image = arr[i]["image"]
+								var pop = arr[i]["pop"]
+								var label = arr[i]["label"]
+								var mp3 = arr[i]["hmp3"]
+								var bpm = arr[i]["bpm"]
 								
 								// color changing
 								if (i % 2 == 0){
@@ -98,12 +113,16 @@
 
 								// songs adding
 								list += `<a href="${href}" class="list-group-item list-group-item-action flex-column align-items-start ${active}">\
-										<div class="d-flex w-100 justify-content-between">\
-											<h5 class="mb-1">${title.bold()} ● ${artist}</h5>\
-											<small><img src="${image}"></small>\
+										<div class="d-flex w-100 justify-content-between" >\
+											<h5 class="mb-1">${name.bold()} ● ${artist}</h5>\
+											<small onmouseenter="playSong(${i})" onmouseout="pauseSong()">
+												<img src="${image}">
+												<figcaption>${bpm} BPM</figcaption>
+											</small>\
 										</div>\
 										<p class="mb-1">${album}</p>\
-										<small>${label}</small>\
+										<small style="text-algin:center">${label}</small>
+										\
 									</a>`;
 								}
 
@@ -112,8 +131,11 @@
 						}
 							
 						
+						var a = new Audio()
+						var arr = JSON.parse('{{ arr | tojson | safe }}');
+						var yt = '{{ yt }}';
 
-						var arr = JSON.parse('{{ arr | tojson }}');
+
 
 						showSongs(arr)
 						hideSearchform(arr)
