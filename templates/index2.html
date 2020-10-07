@@ -58,11 +58,16 @@
 							document.getElementById("formid").submit();
 						}
 
-						function hideSearchform(){
+						function hideSearchform(video){
 							if ((arr.length)>0){
+								link = 'https://open.spotify.com/playlist/'+video["sp_url"];
+								title = video["title"]
+
 								document.getElementById("search_form").style="display:none";
 								document.getElementById("resetbutton").style="display:inline";
-								document.getElementById("title").innerHTML = yt
+								helement = `<a href="${link}">${title}</a>`;
+								document.getElementById("title").innerHTML = helement;	
+								
 							}
 						}
 
@@ -70,7 +75,7 @@
 								document.getElementById("search_form").style="display:inline";
 								document.getElementById("list-content").innerHTML = "";
 								document.getElementById("resetbutton").style="display:none";
-								document.getElementById("title").innerHTML = "YOUTUBE 2 SPOTIFY"
+								document.getElementById("title").innerText = "YOUTUBE 2 SPOTIFY";
 								arr = []
 
 						}
@@ -85,6 +90,8 @@
 						function pauseSong(){
 							a.pause();
 						}
+
+
 
 						function showSongs(){
 							let con = document.getElementById('list-content');   									
@@ -131,14 +138,14 @@
 						}
 							
 						
-						var a = new Audio()
-						var arr = JSON.parse('{{ arr | tojson | safe }}');
-						var yt = '{{ yt }}';
+						var a = new Audio()  
+						var arr = {{ arr | tojson | safe }}; 
+						var video = {{ video | tojson | safe }};
 
 
 
-						showSongs(arr)
-						hideSearchform(arr)
+						showSongs()
+						hideSearchform(video)
 
 					</script>
 

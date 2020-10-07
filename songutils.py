@@ -1,18 +1,24 @@
 from sqlutils import insertMany, insertOne
-from sputils import sp
 import pickle
 
 
 
 # save song in sql
 def saveSongs(x,yt):
-    saveRes(x,yt)
-    #addSongs(res,yt)
+    #saveRes(x,yt)
+    #addSongs(x,yt)
+    print('you')
 
-def addSongs(res,yt):
-    addArtists(res)
-    addAlbums(res)
-    addTracks(res)
+
+
+
+
+
+def addSongs(x,yt):
+
+    addArtists(x)
+    addAlbums(x)
+    addTracks(x)
     addVideo(yt)
 
 

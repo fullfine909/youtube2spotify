@@ -1,0 +1,6 @@
+a = '[{\'id\': \'7k2duflJpo7rrvYsYYQ1mp\', \'name\': \'Brightness [2K20] (T78 & MOTVS Remix) - Mixed\', \'artist\': \'Junk Project & T78 & MOTVS\', \'album\': \'Outburst presents Prism Volume 3\', \'album_id\': \'49pfelBbTpO1WWF81YfQOk\', \'href\': \'https://open.spotify.com/track/7k2duflJpo7rrvYsYYQ1mp\', \'hmp3\': \'https://p.scdn.co/mp3-preview/89dba51821bcbd9aadf1e68c21e77865a9b327f1?cid=5a170e03cdce4c0ba9a68a1619a0bf8a\', \'image\': \'https://i.scdn.co/image/ab67616d00004851c75341ee94d057730a926f6e\', \'pop\': 9, \'bpm\': 135, \'label\': \'Black Hole Recordings\'}, {\'id\': \'6uoV6hRyGIVHPOG3ZLzALw\', \'name\': \'Boarding Time - Original Mix\', \'artist\': \'Calling "The Freak"\', \'album\': \'Scanner - Retrospective\', \'album_id\': \'381XkRS7PctsgXjOLPpLzY\', \'href\': \'https://open.spotify.com/track/6uoV6hRyGIVHPOG3ZLzALw\', \'hmp3\': \'https://p.scdn.co/mp3-preview/04b7d5b1159b2af6edb984c1bed25213311d89e6?cid=5a170e03cdce4c0ba9a68a1619a0bf8a\', \'image\': \'https://i.scdn.co/image/ab67616d00004851ca32082230c12de177d40750\', \'pop\': 1, \'bpm\': 138, \'label\': \'Bonzai Classics\'}]'
+a = a.replace('"','\\"')
+a = a.replace("'",'"')
+
+
+print('ey')

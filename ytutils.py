@@ -1,5 +1,7 @@
 from googleapiclient.discovery import build
 from urllib.parse import urlparse, parse_qs
+import youtube_dl
+
 
 
 def ytclient():
@@ -20,18 +22,31 @@ def getVideoInfo(arr_id):
     response = request.execute()
     v = response['items'][0]
 
+    try:
+        likes = v['statistics']['likeCount']
+    except:
+        likes = 0
+
     vdict = {
         'id':v['id'],
         'title':v['snippet']['title'],
         'channel':{'id':v['snippet']['channelId'],'name':v['snippet']['channelTitle']},
         'views':v['statistics']['viewCount'],
-        'likes':v['statistics']['likeCount']}
+        'likes':likes}
 
     return vdict
 
+def addMusicInfo(url):
+    with ydl:
+        video = ydl.extract_info(url, download=False)
 
-def addVideoComments(vdict):
-    vid = vdict["id"]
+    minfo = {
+        'name':video['track'],
+        'artist':video['artist']
+
+    }
+    
+def addVideoComments(vid):
     request = yt.commentThreads().list( # pylint: disable=maybe-no-member
         part="snippet",
         maxResults=50,
@@ -45,11 +60,10 @@ def addVideoComments(vdict):
     th = 5
     cfinal = list(filter( lambda l: cfilter(l,th),ctext))
     cjoined = '\r\n'.join(cfinal)
-    vdict["comments"] = cjoined
-    return vdict
+    return cjoined
 
 def cfilter(c,th):
-    if c.count('-') > th:
+    if c.count('\n') > th:
         return True
     else:
         return False
@@ -57,8 +71,10 @@ def cfilter(c,th):
 def getVideo(url):
     vid = getVideoID(url)
     vdict = getVideoInfo(vid)
-    return addVideoComments(vdict)
+    #vdict["music"] = addMusicInfo(url)
+    vdict["comments"] = addVideoComments(vid)
+    return vdict
 
 
 yt = ytclient()
-
+ydl = youtube_dl.YoutubeDL({})

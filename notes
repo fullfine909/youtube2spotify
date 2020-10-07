@@ -1,15 +1,19 @@
-youtube - videos - no pedir siempre likes
+youtube 
         - contar peticiones a videos sin tracklist
-        - arreglar comentarios con comillas
         - guardar deejay según canal
+        - save 
 
-sql     - llenar base de datos
+sql     
+        - llenar base de datos
         - un artista que canciones ha pinchado
         - un artista en que sesiones ha aparecido
+
 
 usuarios
         - registro de videos analizados
 
 spotify
         - crear playlist con canciones encontradas
+
+
 

@@ -26,13 +26,14 @@
 						<div class="col-lg-4">
 						</div>
 						<div class="col-lg-4">
-							<h1>YOUTUBE 2 SPOTIFY</h1>
+							<h1 id=title> <a href="#"></a> >YOUTUBE 2 SPOTIFY</h1>
+							<br><br>
 							<div class="bs-component">
 								<!-- USER INPUT-->
 								<form id="formid" method="post">
 									<fieldset>										
 										<div id="search_form" class="form-group">
-											<h3>Youtube link</h3>
+											<h5>Youtube link</h5>
 											<input type="text" name="link_input" placeholder="Paste it here!" style="color:whitesmoke; background-color:black;border:black;"required></textarea>											
 											<br><br>
 											<input type="button" class="btn btn-primary" value="GO!" onclick="submitAndHide()"></button>
@@ -51,72 +52,6 @@
 					</div>
 						
 
-					<script>
-						function submitAndHide(){
-							document.getElementById("search_form").style="display:none";
-							document.getElementById("formid").submit();
-
-						}
-
-						function hideSearchform(){
-							if ((arr.length)>0){
-								document.getElementById("search_form").style="display:none";
-								document.getElementById("resetbutton").style="display:inline";
-							}
-						}
-
-						function reset_on_click(){
-								document.getElementById("search_form").style="display:inline";
-								document.getElementById("list-content").innerHTML = "";
-								document.getElementById("resetbutton").style="display:none";
-								arr = []
-
-						}
-															
-						function showSongs(){
-							let con = document.getElementById('list-content');   									
-							var list = '<div class="list-group">';
-							var active
-
-							//loop for songs
-							for(let i=0;i<arr.length;i++){
-
-								var title = arr[i][1]
-								var artist = arr[i][2]
-								var album = arr[i][3]
-								var href = arr[i][4]
-								var image = arr[i][5]
-								var pop = arr[i][6]
-								var label = arr[i][7]
-								
-								// color changing
-								if (i % 2 == 0){
-									active = 'active'
-								} else {
-									active = ''
-								}
-
-								// songs adding
-								list += `<a href="${href}" class="list-group-item list-group-item-action flex-column align-items-start ${active}">\
-										<div class="d-flex w-100 justify-content-between">\
-											<h5 class="mb-1">${title.bold()} ● ${artist}</h5>\
-											<small><img src="${image}"></small>\
-										</div>\
-										<p class="mb-1">${album}</p>\
-										<small>${label}</small>\
-									</a>`;
-								}
-
-							list += '</div>';
-							con.innerHTML = list;
-						}
-							
-						
-
-						var arr = JSON.parse('{{ arr | tojson }}');
-
-						showSongs(arr)
-						hideSearchform(arr)
 
 					</script>
 
