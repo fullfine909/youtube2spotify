@@ -1,0 +1,7 @@
+spotipy
+flask
+google-api-python-client
+pandas
+mysql-connector-python
+pylint
+beautifulsoup4

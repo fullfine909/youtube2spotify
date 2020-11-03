@@ -1,17 +1,21 @@
 from googleapiclient.discovery import build
 from urllib.parse import urlparse, parse_qs
-import youtube_dl
 
 
 
 def ytclient():
     api_key = 'AIzaSyBDxBo5zmRC8gNIdgziB1elmDVmlBzVozY'
+    api_key = 'AIzaSyCmUJerITlURIVHmqHMJ7v5PWyglCohrsQ'
     return build('youtube','v3',developerKey=api_key)
 
 def getVideoID(url):
-    url_data = urlparse(url)
-    query = parse_qs(url_data.query)
-    return query["v"][0]
+    if 'https://youtu.be/' in url:
+        return url[url.rfind('/')+1:]
+
+    else:
+        url_data = urlparse(url)
+        query = parse_qs(url_data.query)
+        return query["v"][0]
 
 
 def getVideoInfo(arr_id):
@@ -29,22 +33,16 @@ def getVideoInfo(arr_id):
 
     vdict = {
         'id':v['id'],
-        'title':v['snippet']['title'],
+        'name':v['snippet']['title'],
         'channel':{'id':v['snippet']['channelId'],'name':v['snippet']['channelTitle']},
         'views':v['statistics']['viewCount'],
-        'likes':likes}
+        'likes':likes,
+        'himg':v['snippet']['thumbnails']['high']['url']}
 
     return vdict
 
 def addMusicInfo(url):
-    with ydl:
-        video = ydl.extract_info(url, download=False)
-
-    minfo = {
-        'name':video['track'],
-        'artist':video['artist']
-
-    }
+    print('srapper')
     
 def addVideoComments(vid):
     request = yt.commentThreads().list( # pylint: disable=maybe-no-member
@@ -63,7 +61,7 @@ def addVideoComments(vid):
     return cjoined
 
 def cfilter(c,th):
-    if c.count('\n') > th:
+    if c.count(' - ') > th:
         return True
     else:
         return False
@@ -77,4 +75,3 @@ def getVideo(url):
 
 
 yt = ytclient()
-ydl = youtube_dl.YoutubeDL({})

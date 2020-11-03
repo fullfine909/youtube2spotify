@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block col %}
+<h1 id=title>YOUTUBE 2 SPOTIFY</h1>
+<br><br>
+<div class="bs-component">
+	<!-- USER INPUT-->
+	<form id="formid" method="post">
+		<fieldset>										
+			<div id="search_form" class="form-group">
+				<h5>Youtube link</h5>
+				<input type="text" name="link_input" placeholder="Paste it here!" style="color:whitesmoke; background-color:black;border:black;"required></textarea>											
+				<br><br>
+				<input type="submit" class="btn btn-primary" value="GO!" name="goresult"></button>
+			</div>
+		</fieldset>
+	</form>
+	<!-- RESULT-->
+	<br> <br>
+	<div id="list-content" >
+	</div>
+</div>
+{% endblock %}
+
+{% block colres %}
+<form id="formid" method="post">
+<input type="submit" class="btn btn-primary" value="DATABASE" name="gosql">
+</form>
+{% endblock %}

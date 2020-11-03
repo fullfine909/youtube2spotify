@@ -5,6 +5,7 @@ from itertools import compress
 from FlaskWebProject1.myutils import divide_chunks, similarity
 
 
+
 def spotify_client():
     client_id = 'e904f73835b24d0ab4e8c2ec0194ec25'
     client_secret = '1122b4835ab6422890c30e49407076a1'
@@ -17,18 +18,18 @@ def spotify_clientOA():
 
     client_id = 'e904f73835b24d0ab4e8c2ec0194ec25'
     client_secret = '1122b4835ab6422890c30e49407076a1'
-    redirect_uri = 'http://ys5-env.eba-mjmi37yf.eu-west-1.elasticbeanstalk.com/23444/'
+    redirect_uri = 'http://ys5-env.eba-mjmi37yf.eu-west-1.elasticbeanstalk.com/'
     username = 'dtd9srb32n2qbzn2c35j4iutg'
-    auth_manager = SpotifyOAuth(client_id=client_id,client_secret=client_secret,redirect_uri=redirect_uri,username=username,scope=scope)
+    auth_manager = SpotifyOAuth(client_id=client_id,client_secret=client_secret,redirect_uri=redirect_uri,username=username,scope=scope,cache_path='.mycache')
 
     return spotipy.Spotify(oauth_manager=auth_manager)
 
 # search songs in youtube and get the spotify link
-def find_songs(songs_list):
-    songs_format = list(filter(None,list(map(checkline,songs_list))))   # remove index, labels and useless information
-    songs_unique = uniqueSearch(songs_format)                           # delete duplicate songs (two comments) for sp search
-    songs_found = list(map(getSpotifySong,songs_unique))                # songs found in spotify
-    bool_list = list(map(lambda x,y:checkSong(x,y), songs_format, songs_found)) # check that song found is the same as the youtube
+def find_songs(songs_list,s2):
+    songs_format = list(filter(None,list(map(checkline,songs_list))))   # remove index, labels, useless information
+    songs_formatu = list(dict.fromkeys(songs_format))                   # delete duplicate songs (two comments) for sp search
+    songs_found = list(map(getSpotifySong,songs_formatu))   # songs found in spotify
+    bool_list = list(map(lambda x,y:checkSong(x,y), songs_formatu, songs_found)) # check that song found is the same as the youtube
     songs_checked = list(compress(songs_found, bool_list)) # list of songs
     song_metadata = addData(songs_checked)
 
@@ -80,9 +81,6 @@ def checkline(x):
 
         return x
 
-def uniqueSearch(x):
-    return list(dict.fromkeys(x))
-
 def getSpotifySong(x):
 
     # search song in spotify
@@ -94,12 +92,14 @@ def getSpotifySong(x):
             'id':track['id'],
             'name':track['name'],
             'artist':getArtistString(track['artists']),
+            'artist_db':[(x['id'],x['name']) for x in track['artists']],
             'album':track['album']['name'],
             'album_id':track['album']['id'],
             'href':track['external_urls']['spotify'],
             'hmp3':track['preview_url'],
-            'image':track['album']['images'][2]['url'],
-            'pop':track['popularity']}
+            'himg':track['album']['images'][2]['url'],
+            'pop':track['popularity'],
+            'dur':track['duration_ms']}
 
         return song
     else:
@@ -132,6 +132,7 @@ def addData(songs):
         for i in range(len(songs)):
             songs[i].update({'bpm':round(resTm[i]['tempo'])})
             songs[i].update({'label':resAm[i]['label']})
+            songs[i].update({'atype':resAm[i]['album_type']})
 
     return songs
 
@@ -139,7 +140,7 @@ def addData(songs):
 def createPlaylist(x,name):
     #deletePlaylists()
 
-    user = 'dtd9srb32n2qbzn2c35j4iutg'
+    user = spOA.current_user()['id']
 
     cu_pl = spOA.current_user_playlists()
     names = [p['name'] for p in cu_pl['items']]
@@ -154,8 +155,8 @@ def createPlaylist(x,name):
         return playlist_id
 
     else:
-
-        return cu_pl['items'][0]['id']
+        idx = names.index(name)
+        return cu_pl['items'][idx]['id']
 
 def deletePlaylists():
     playlists = spOA.current_user_playlists()
@@ -190,3 +191,6 @@ def print2songs(idx,songs_found,songs_format):
 
 sp = spotify_client()
 spOA = spotify_clientOA()
+
+
+

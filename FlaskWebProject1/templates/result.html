@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block col %}
+<h1 id=title>PATATA</h1>
+<br><br>
+<div class="bs-component">
+	<div id="list-content" ></div>
+</div>
+
+<script>
+
+
+	function reset_on_click(){
+			document.getElementById("search_form").style="display:inline";
+			document.getElementById("list-content").innerHTML = "";
+			document.getElementById("resetbutton").style="display:none";
+			document.getElementById("title").innerText = "YOUTUBE 2 SPOTIFY";
+			arr = []
+
+	}
+	
+	function playSong(i){
+		a.pause();
+		mp3 = arr[i]["hmp3"]
+		a = new Audio(mp3);
+		a.play();
+	}
+
+	function pauseSong(){
+		a.pause();
+	}
+
+
+
+	function showSongs(){
+
+	
+
+		let con = document.getElementById('list-content');   									
+		var list = '<div class="list-group">';
+		var active
+
+		//loop for songs
+		for(let i=0;i<arr.length;i++){
+
+			var name = arr[i]["name"]
+			var artist = arr[i]["artist"]
+			var album = arr[i]["album"]
+			var href = arr[i]["href"]
+			var mp3 = arr[i]["hmp3"]
+			var image = arr[i]["himg"]
+			var pop = arr[i]["pop"]
+			var bpm = arr[i]["bpm"]
+			var label = arr[i]["label"]
+			
+			
+			
+			// color changing
+			if (i % 2 == 0){
+				active = 'active'
+			} else {
+				active = ''
+			}
+
+			// songs adding
+			list += `<a href="${href}" class="list-group-item list-group-item-action flex-column align-items-start ${active}">\
+					<div class="d-flex w-100 justify-content-between" >\
+						<h5 class="mb-1">${name.bold()} ● ${artist}</h5>\
+						<small onmouseenter="playSong(${i})" onmouseout="pauseSong()">
+							<img src="${image}">
+							<figcaption>${bpm} BPM</figcaption>
+						</small>\
+					</div>\
+					<p class="mb-1">${album}</p>\
+					<small style="text-algin:center">${label}</small>
+					\
+				</a>`;
+			}
+
+		list += '</div>';
+		con.innerHTML = list;
+
+		link = 'https://open.spotify.com/playlist/'+video["hspt"];
+		title = video["name"]
+		helement = `<a href="${link}">${title}</a>`;
+		document.getElementById("title").innerHTML = helement;
+
+	}
+		
+	
+	var a = new Audio()  
+	var arr = {{ arr | tojson | safe }}; 
+	var video = {{ video | tojson | safe }};
+
+	showSongs()
+
+</script>
+{% endblock %}
+
+{% block colres %}
+<form id="formid" method="post">
+<input type="submit" id="resetbutton" class="btn btn-primary" value="Reset">
+</form>
+{% endblock %}
