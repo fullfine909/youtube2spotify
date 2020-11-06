@@ -2,7 +2,7 @@
 Youtube2Spotify is a tool designed to get Spotify playlists from YouTube videos of DJ sets. As a lover of electronic music, I enjoy listening to dj sets and many times I come across songs that I would like to add to my music library. Now this task is much easier for me thanks to this tool.
 
 # Try it right now!
-- http://ys5-env.eba-mjmi37yf.eu-west-1.elasticbeanstalk.com/
+- http://newys-env.eba-zuczgtaa.eu-west-1.elasticbeanstalk.com/
 
 Examples to test it:
 - https://www.youtube.com/watch?v=4utKO75DtBE&feature=youtu.be&ab_channel=BE-AT.TV
